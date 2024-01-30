@@ -4,76 +4,76 @@ using namespace std;
 
 class person{
 	private :
-		person *left;
-		person *right;
+		int f1;
+		int f2;
 		char job[100];
 	public :
-		person *getleft(){
-			return this->left;
+		int getf1(){
+			return f1;
 		}
-		person *getright(){
-			return this->right;
+		int getf2(){
+			return f2;
 		}
-		void setleft(person &p){
-			left=&p; 
+		void setf1(int p){
+			f1=p; 
 		}
-		void setright(person &p){
-			right=&p;
+		void setf2(int p){
+			f2=p;
 		}
 		void setjob(const char a[]){
 			strcpy(job,a);
 		}
 		void print(){
-			cout<<job<<endl;
+			cout<<job;
 		}
 };
 int main(){
-//	person p1,p2;
-//	p1.setjob("worker");
-//	p2.setjob("officer");
-//	p1.setleft(p2);
-//	p2.setright(p1);
-//	p1.getleft()->print();
 //对于朝内的人，从右手起是逆时针方向
 //对于朝外的人，从左手起是逆时针方向 
+//规定10是朝内，01是朝外 
 	int n,m;
 	int flag;
 	cin>>n>>m;
 	char job[100];
 	person per[n];
+	
 	for(int i=0;i<n;i++){
 		cin>>flag;
 		cin>>job;
 		per[i].setjob(job);
 		if(flag==0){
-			per[i].setright(per[(i+1)%n]);
-			per[i].setleft(per[(i-1+n)%n]);
-		}else if(flag==1){
-			per[i].setleft(per[(i+1)%n]);
-			per[i].setright(per[(i-1+n)%n]);
+			per[i].setf1(1);
+			per[i].setf2(0);
+		}else{
+			per[i].setf1(0);
+			per[i].setf2(1);
 		}
 	}
 	int step;
-	person *p=&per[0];
+	int pos=0;
+	person *p=&per[pos];
 	for(int i=0;i<m;i++){
 		cin>>flag;
 		cin>>step;
 		if(flag==0){
-			for(int j=0;j<step;j++){
-				p=p->getleft();
+			if(per[pos].getf1()==1&&per[pos].getf2()==0){
+
+				pos=(pos-step+n)%n;
+			}else if(per[pos].getf1()==0&&per[pos].getf2()==1){
+
+				pos=(pos+step)%n;
 			}
 		}else{
-			for(int j=0;j<step;j++){
-				p=p->getright();
+			if(per[pos].getf1()==1&&per[pos].getf2()==0){
+
+				 pos=(pos+step)%n;
+			}else if(per[pos].getf1()==0&&per[pos].getf2()==1){
+				pos=(pos-step+n)%n;
 			}
 		}
 	}
-	p->print();
-	for(int i=0;i<n;i++){
-		per[i].print();
-		per[i].getleft()->print();
-		per[i].getright()->print();
-	}
+
+	per[pos].print();
 	return 0;
 }
 
